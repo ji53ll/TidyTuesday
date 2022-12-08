@@ -1,0 +1,117 @@
+---
+title: "TidyTuesday_2022W49"
+author: "Jisell Howe"
+editor: visual
+execute: 
+  echo: FALSE
+  warning: FALSE
+  wrap: TRUE
+---
+
+```{r}
+remotes::install_github("emilhvitfeldt/elevators")
+```
+
+```{r}
+library(elevators)
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+
+#elevators
+```
+
+```{r}
+df_mfg <- na.omit(elevators)
+df_mfg <- filter(df_mfg, manufacturer != "MISSING")
+
+
+
+
+
+
+
+df_mfg$travel_distance <- as.numeric(df_mfg$travel_distance)
+df_mfg$bin <- as.numeric(df_mfg$bin)
+df_mfg$house_number <- as.numeric(df_mfg$house_number)
+df_mfg$tax_block <- as.numeric(df_mfg$tax_block)
+df_mfg$zip_code <- as.numeric(df_mfg$zip_code)
+
+df_mfg <- df_mfg[order(df_mfg$manufacturer),]
+elevator_app <- df_mfg[order(df_mfg$approval_date),]
+
+elevators_min <- head(elevator_app, 1)
+elevators_max <- tail(elevator_app, 1)
+
+
+
+oldest_elevators <- head(elevator_app, 8)
+#df_mfg
+#oldest_elevators
+
+#df_mfg_test <- filter(df_mfg, manufacturer == "Embassy")
+#df_mfg_test
+
+```
+
+```{r}
+# create plot 
+
+palette <- c("#00B6BD", "#411066", "#F34B68", "#8FDA93")
+
+
+p <- ggplot(df_mfg, aes(x = manufacturer, y = approval_date, color = borough)) +
+        theme_solarized_2() +
+        geom_segment(aes(
+          x = manufacturer, 
+          y = approval_date, 
+          xend = manufacturer, 
+          yend = lastper_insp_date), size = 1, alpha = 0.5, show.legend = FALSE) +
+        geom_point(size =3, alpha = 0.5) +
+        geom_hline(
+          yintercept = as.numeric(as.Date("2010-01-01"), format="%Y%m%d"), 
+            linetype = "dotted", 
+            linewidth = 0.8, 
+            color ="black",
+            alpha = 0.3) +
+        geom_hline(
+          yintercept = as.numeric(as.Date("2000-01-01"), format="%Y%m%d"), 
+            linetype = "dotted", 
+            linewidth = 0.8, 
+            color ="black",
+            alpha = 0.3) +
+                geom_hline(
+          yintercept = as.numeric(as.Date("1990-01-01"), format="%Y%m%d"), 
+            linetype = "dotted", 
+            linewidth = 0.8, 
+            color ="black",
+            alpha = 0.3) +
+    labs(title = "Traveling through Space & Time",
+         subtitle = "Popularity of elevators installed and inspected over time throughout New York City",
+         caption = "Of the known manufacturers in the source dataset, manufacturers such as A.B. See, Curtis, Dover, Otis, and Republic had some of the oldest elevators\napproved for install. The manufacturer MRL saw a lot of popularity since the early- to mid-2000s. Some manufacturers such as Republic saw popularity\nthroughout time.\n| Data Source: NYC Department of Buildings. Retrieved from: https://emilhvitfeldt.github.io/elevators/ | #TidyTuesday Week 49 | Graphic: Jisell Howe | ") +
+    theme(axis.ticks.x = element_blank(),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank()) +
+          scale_color_manual(values = palette) +
+    theme(plot.title = element_text(family = "serif", 
+                                  face = "bold",    
+                                  color = "#262625",
+                                  size = 20,
+                                  hjust = 0,
+                                  vjust = 1,
+                                  lineheight = 1,
+                                  margin = margin(0, 0, 0, 0)),
+          plot.subtitle = element_text(hjust = 0, size = 9),
+          plot.caption = element_text(hjust = 0, size = 7),
+          plot.caption.position = "plot")
+p
+
+
+```
+
+```{r}
+# save the plot as png
+
+ggsave("TidyTuesdayW49_Jisell_Howe.png")
+```
