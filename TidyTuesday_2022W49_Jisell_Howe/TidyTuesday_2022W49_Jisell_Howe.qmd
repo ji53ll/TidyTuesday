@@ -22,10 +22,15 @@ library(ggthemes)
 ```
 
 ```{r}
-df_mfg <- na.omit(elevators)
+#df_mfg <- na.omit(elevators)
+df_mfg <- elevators
 df_mfg <- filter(df_mfg, manufacturer != "MISSING")
+#df_mfg <- filter(na.omit(df_mfg, manufacturer))
+#df_mfg <- filter(na.omit(df_mfg, approval_date))
+#df_mfg <- filter(df_mfg$approval_date != NA)
+#df_mfg <- filter(na.omit(df_mfg, lastper_insp_date))
 
-
+df_mfg <- df_mfg[!(is.na(df_mfg$approval_date)), ]
 
 
 
@@ -49,51 +54,36 @@ oldest_elevators <- head(elevator_app, 8)
 #df_mfg
 #oldest_elevators
 
-#df_mfg_test <- filter(df_mfg, manufacturer == "Embassy")
+df_mfg_test <- filter(df_mfg, manufacturer == "MRL")
 #df_mfg_test
+
+df <- elevators[order(elevators$approval_date),]
+#df
 
 ```
 
 ```{r}
 # create plot 
 
-palette <- c("#00B6BD", "#411066", "#F34B68", "#8FDA93")
+palette <- "#027368"
 
 
-p <- ggplot(df_mfg, aes(x = manufacturer, y = approval_date, color = borough)) +
+p <- ggplot(df_mfg, aes(x = manufacturer, y = approval_date)) +
         theme_solarized_2() +
         geom_segment(aes(
           x = manufacturer, 
           y = approval_date, 
           xend = manufacturer, 
-          yend = lastper_insp_date), size = 1, alpha = 0.5, show.legend = FALSE) +
-        geom_point(size =3, alpha = 0.5) +
-        geom_hline(
-          yintercept = as.numeric(as.Date("2010-01-01"), format="%Y%m%d"), 
-            linetype = "dotted", 
-            linewidth = 0.8, 
-            color ="black",
-            alpha = 0.3) +
-        geom_hline(
-          yintercept = as.numeric(as.Date("2000-01-01"), format="%Y%m%d"), 
-            linetype = "dotted", 
-            linewidth = 0.8, 
-            color ="black",
-            alpha = 0.3) +
-                geom_hline(
-          yintercept = as.numeric(as.Date("1990-01-01"), format="%Y%m%d"), 
-            linetype = "dotted", 
-            linewidth = 0.8, 
-            color ="black",
-            alpha = 0.3) +
+          yend = lastper_insp_date), size = 1, alpha = 0.5, show.legend = FALSE, color = palette) +
+        geom_point(size =3, alpha = 0.1, color = palette) +
     labs(title = "Traveling through Space & Time",
          subtitle = "Popularity of elevators installed and inspected over time throughout New York City",
-         caption = "Of the known manufacturers in the source dataset, manufacturers such as A.B. See, Curtis, Dover, Otis, and Republic had some of the oldest elevators\napproved for install. The manufacturer MRL saw a lot of popularity since the early- to mid-2000s. Some manufacturers such as Republic saw popularity\nthroughout time.\n| Data Source: NYC Department of Buildings. Retrieved from: https://emilhvitfeldt.github.io/elevators/ | #TidyTuesday Week 49 | Graphic: Jisell Howe | ") +
+         caption = "Of the known manufacturers in the source dataset, manufacturers such as A.B. See, Armor, Curtis, Dover, Otis, Republic, Seaberg Inc, Staley Electric, and\nWestinghouse had some of the oldest elevators approved for install. MRL elevators saw a lot of popularity since the early- to mid-2000s. However, that may\nbe referring to manufacturers of Machine-Room-Less* elevators in general. Some manufacturers such as Otis saw steady popularity throughout time.\n| Data Source: NYC Department of Buildings. | Retrieved from: https://emilhvitfeldt.github.io/elevators/ |\n| Article Source*: https://www.hosting-elevator.com/mrl-elevator/ | #TidyTuesday Week 49 | Graphic: Jisell Howe | ") +
     theme(axis.ticks.x = element_blank(),
           axis.text.x = element_text(angle = 45, hjust = 1),
           axis.title.x = element_blank(),
-          axis.title.y = element_blank()) +
-          scale_color_manual(values = palette) +
+          axis.title.y = element_blank(),
+          legend.position="none") +
     theme(plot.title = element_text(family = "serif", 
                                   face = "bold",    
                                   color = "#262625",
