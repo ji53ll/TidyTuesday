@@ -32,7 +32,7 @@ df_mfg <- filter(df_mfg, manufacturer != "MISSING")
 
 df_mfg <- df_mfg[!(is.na(df_mfg$approval_date)), ]
 
-
+elevators <- elevators[!(is.na(elevators$approval_date)), ]
 
 
 
@@ -48,6 +48,8 @@ elevator_app <- df_mfg[order(df_mfg$approval_date),]
 elevators_min <- head(elevator_app, 1)
 elevators_max <- tail(elevator_app, 1)
 
+#df_mfg
+#elevators
 
 
 oldest_elevators <- head(elevator_app, 8)
@@ -59,6 +61,8 @@ df_mfg_test <- filter(df_mfg, manufacturer == "MRL")
 
 df <- elevators[order(elevators$approval_date),]
 #df
+
+
 
 ```
 
