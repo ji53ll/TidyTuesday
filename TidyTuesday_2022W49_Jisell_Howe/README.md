@@ -11,3 +11,10 @@ https://github.com/jrnold/ggthemes <br>
 https://github.com/tidyverse/ggplot2 <br>
 {elevators} <br>
 https://github.com/EmilHvitfeldt/elevators <br>
+
+
+The data this week comes from [Elevators Package](https://github.com/EmilHvitfeldt/elevators). 
+
+This [ARTICLE_SOURCE](https://www.hosting-elevator.com/mrl-elevator/) talks about MRL elevators in greater detail.
+
+Credit: [Jisell Howe](https://data-folks.masto.host/@jisell)
